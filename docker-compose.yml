@@ -1,0 +1,56 @@
+version: '3'
+services: 
+  db:
+    image: postgres
+    restart: always
+    environment: 
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_DB}
+    container_name: postgres-db
+    # ports: 
+    #   - "5432:5432" # expose-to-the-world : only-in-the-docker
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  nestjs:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    image: tusharchy/nest-and-postgres-application:latest
+    environment: 
+      - DB_TYPE=postgres
+      - POSTGRES_HOST=postgres-db
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASS=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_SYNC=false
+      - JWT_SECRET=todo24
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - APP_EXPIRES=3600
+      - APP_PORT=3000
+    ports: 
+      - "3000:3000" # expose-to-the-world : only-in-the-docker
+    container_name: nest-todo-app-be
+    depends_on: 
+      - db
+    volumes: 
+      - .:/app
+      - /app/node_modules
+    # command: npm run start:dev
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: nest-pgadmin4
+    environment: 
+      - PGADMIN_DEFAULT_EMAIL=postgres@mail.com
+      - PGADMIN_DEFAULT_PASSWORD=admin12
+      - PGADMIN_LISTEN_PORT=80
+    ports: 
+      - "8080:80"
+    volumes: 
+      - ./pgadmin-data:/var/lib/pgadmin
+    depends_on: 
+      - db
+volumes:
+  pgdata:
+  pgadmin-data:
