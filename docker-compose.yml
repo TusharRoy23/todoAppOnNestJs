@@ -6,10 +6,8 @@ services:
     environment: 
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_DB}
+      - POSTGRES_DB=${DB_NAME}
     container_name: postgres-db
-    # ports: 
-    #   - "5432:5432" # expose-to-the-world : only-in-the-docker
     volumes:
       - ./pgdata:/var/lib/postgresql/data
   nestjs:
@@ -24,9 +22,9 @@ services:
       - POSTGRES_PASS=${DATABASE_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_SYNC=false
-      - JWT_SECRET=todo24
+      - JWT_SECRET=${JWT_SECRET}
       - POSTGRES_PORT=${POSTGRES_PORT}
-      - APP_EXPIRES=3600
+      - APP_EXPIRES=${APP_EXPIRES}
       - APP_PORT=3000
     ports: 
       - "3000:3000" # expose-to-the-world : only-in-the-docker
