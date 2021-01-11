@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://tushar-chy.medium.com/a-simple-todo-application-with-nestjs-typeorm-postgresql-swagger-pgadmin4-jwt-and-docker-caa2742a4295" target="blank"> <img src="https://repository-images.githubusercontent.com/180571949/1816f680-a221-11ea-8ae0-8d90df8436bb" alt="Nest Logo" /></a>
+  <a href="https://tushar-chy.medium.com/a-simple-todo-application-with-nestjs-typeorm-postgresql-swagger-pgadmin4-jwt-and-docker-caa2742a4295" target="_blank"> <img src="https://repository-images.githubusercontent.com/180571949/1816f680-a221-11ea-8ae0-8d90df8436bb" alt="Nest Logo" /></a>
 </p>
 
 ## Description
