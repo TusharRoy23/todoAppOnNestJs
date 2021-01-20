@@ -2,6 +2,7 @@ import { User } from "../../auth/entity/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { TodoDto } from "../dto/todo.dto";
 import { Todo } from "../entity/todo.entity";
+import { TodoPayload } from "../interface/todo-payload.interface";
 
 @EntityRepository(Todo)
 export class TodoRepository extends Repository<Todo> {
@@ -23,7 +24,7 @@ export class TodoRepository extends Repository<Todo> {
         return todo
     }
 
-    async getAllTodo(user: User): Promise<Todo[]> {
+    async getAllTodo(user: User): Promise<TodoPayload[]> {
         const query = this.createQueryBuilder('todo')
 
         query.where('todo.userId = :userId', { userId: user.id })
