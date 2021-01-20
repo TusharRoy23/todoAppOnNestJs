@@ -29,10 +29,11 @@ export class UserService {
         userInfoDto: UserInfoDto
     ): Promise<userInfoData> {
         const userInfo = await this.getUser(user)
-        userInfo.address = userInfoDto.address
-        userInfo.petName = userInfoDto.petName
-        userInfo.photo = userInfoDto.photo
-        userInfo.modified_photo = userInfoDto.modified_photo
+        
+        if (userInfoDto.address) userInfo.address = userInfoDto.address
+        if (userInfoDto.petName) userInfo.petName = userInfoDto.petName
+        if (userInfoDto.photo) userInfo.photo = userInfoDto.photo
+        if (userInfoDto.modified_photo) userInfo.modified_photo = userInfoDto.modified_photo
         
         await userInfo.save()
         return userInfo

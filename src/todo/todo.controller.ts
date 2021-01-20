@@ -5,6 +5,7 @@ import { GetUser } from "../auth/decorator/get-user.decorator";
 import { User } from "../auth/entity/user.entity";
 import { TodoDto } from "./dto/todo.dto";
 import { Todo } from "./entity/todo.entity";
+import { TodoPayload } from "./interface/todo-payload.interface";
 import { TodoService } from "./service/todo.service";
 
 @ApiTags('Todo')
@@ -20,7 +21,7 @@ export class TodoController {
     @Get()
     getAllTodo(
         @GetUser() user: User
-    ): Promise<Todo[]> {
+    ): Promise<TodoPayload[]> {
         return this.todoService.getAllTodo(user)
     }
 
@@ -29,7 +30,7 @@ export class TodoController {
     createTodo(
         @Body() todoDto: TodoDto,
         @GetUser() user: User
-    ): Promise<Todo> {
+    ): Promise<TodoPayload> {
         return this.todoService.createTodo(todoDto, user)
     }
 
@@ -46,7 +47,7 @@ export class TodoController {
         @Param('id', ParseIntPipe) id: number,
         @Body() todoDto: TodoDto,
         @GetUser() user: User
-    ): Promise<Todo>{
+    ): Promise<TodoPayload>{
         return this.todoService.updateTodoById(id, todoDto, user)
     }
 
@@ -54,7 +55,7 @@ export class TodoController {
     deleteTodoById(
         @Param('id', ParseIntPipe) id: number,
         @GetUser() user: User
-    ): Promise<void>{
+    ): Promise<{ message: string }>{
         return this.todoService.deleteTodoById(id, user)
     }
 }

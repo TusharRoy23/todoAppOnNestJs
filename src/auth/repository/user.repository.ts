@@ -10,7 +10,7 @@ import { JwtPayload } from "../interface/jwt-payload.interface";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-    async signUp(signupCredentialsDto: SignupCredentialsDto) {
+    async signUp(signupCredentialsDto: SignupCredentialsDto): Promise<{ message: string }> {
         const { username, password } = signupCredentialsDto
 
         const user = new User()
@@ -25,6 +25,7 @@ export class UserRepository extends Repository<User> {
             user.user_info = userInfo
             await user.save()
 
+            return { message: 'User successfully created !' }
         } catch (error) {
             if (error.code === '23505') {
                 throw new ConflictException('Username already exists')
