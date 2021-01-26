@@ -16,6 +16,7 @@ export class UserRepository extends Repository<User> {
         const user = new User()
         user.username = username
         user.salt = await bcrypt.genSalt()
+        
         user.password = await this.hashPassword(password, user.salt)
         
         try {
@@ -39,11 +40,22 @@ export class UserRepository extends Repository<User> {
         const { username, password } = signinCredentialDto
         const auth = await this.findOne({ username })
 
-        if (auth && await auth.validatePassword(password)) {
+        if (auth && await auth.validatePassword(password, auth.password)) {
             return {
                 username: auth.username,
                 user_info: auth.user_info
             }
+        } else {
+            return null
+        }
+    }
+
+    async getUserInfoByUsername(username: string) {
+        // console.log('username: ', username)
+        const auth = await this.findOne({ username })
+        // console.log('auth: ', auth)
+        if (auth) {
+            return auth
         } else {
             return null
         }

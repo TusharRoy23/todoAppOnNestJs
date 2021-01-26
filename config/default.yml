@@ -4,7 +4,8 @@ server:
 db:
   type: 'postgres'
   port: 5432
-  database: 'tododb'
+  database: 'todomanagement'
 
 jwt:
-  expiresIn: 3600
+  expiresIn: 40
+  refreshExpiresIn: 120

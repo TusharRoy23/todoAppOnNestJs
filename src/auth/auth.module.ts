@@ -6,26 +6,35 @@ import { AuthController } from './auth.controller';
 import { UserRepository } from './repository/user.repository';
 import { AuthService } from './service/auth.service';
 import { JwtStrategy } from './jwt-strategy';
+import { JwtRefreshStrategy } from './jwt-refresh-strategy';
+
+// import * as config from 'config'
+
+// const dbConfig = config.get('jwt')
 
 @Global()
 @Module({
     imports: [
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.register({
-            secret: process.env.JWT_SECRET,
-            signOptions: {
-                expiresIn: +process.env.APP_EXPIRES
-            }
-        }),
+        // PassportModule.register({ defaultStrategy: 'jwt' }),
+        // JwtModule.register({
+        //     secret: process.env.JWT_ACCESS_TOKEN_SECRET || dbConfig.secret,
+        //     signOptions: {
+        //         expiresIn: +process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME || dbConfig.secret
+        //     }
+        // }),
+        PassportModule.register({}),
+        JwtModule.register({}),
         TypeOrmModule.forFeature([UserRepository])
     ],
     controllers: [AuthController],
     providers: [
         AuthService,
-        JwtStrategy
+        JwtStrategy,
+        JwtRefreshStrategy
     ],
     exports: [
         JwtStrategy,
+        JwtRefreshStrategy,
         PassportModule
     ]
 })

@@ -6,3 +6,4 @@ db:
 
 jwt:
   secret: 'anyKey'
+  refreshSecret: 'noKey'
