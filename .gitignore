@@ -6,6 +6,12 @@
 /pgadmin-data
 /pgdata
 
+# Migration folder
+./src/migration/*.ts
+
+# Keep migration folder
+./src/migration/.gitkeep
+
 # Logs
 logs
 *.log
