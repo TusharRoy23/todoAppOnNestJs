@@ -6,6 +6,9 @@
 /pgadmin-data
 /pgdata
 
+# migration folder
+./src/migration/*.ts
+
 # Logs
 logs
 *.log
