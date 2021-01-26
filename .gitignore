@@ -9,6 +9,9 @@
 # migration folder
 ./src/migration/*.ts
 
+# keep the migration folder
+!./src/migration/.gitkeep
+
 # Logs
 logs
 *.log
