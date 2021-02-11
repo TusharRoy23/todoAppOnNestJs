@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, RelationId, Unique } from "typeorm";
 import * as bcrypt from "bcrypt"
 import { Todo } from "../../todo/entity/todo.entity";
 import { UserInfo } from "../../user/entity/user-info.entity";
@@ -30,6 +30,9 @@ export class User extends BaseEntity {
     @OneToOne(type => UserInfo, { eager: true })
     @JoinColumn()
     user_info: UserInfo
+
+    @RelationId((user: User) => user.user_info)
+    userInfoId: number
 
     async validatePassword(password: string, hashedPassword: string): Promise<boolean> {
         return await bcrypt.compare(password, hashedPassword).then(result => result)

@@ -1,5 +1,5 @@
 import { User } from "../../auth/entity/user.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 
 @Entity()
 export class Todo extends BaseEntity {
