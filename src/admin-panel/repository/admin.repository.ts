@@ -1,14 +1,15 @@
 import { EntityRepository, Repository } from "typeorm";
-import { AdminDto } from "../dto/admin.dto";
+import { AdminSignUpDto } from "../dto/admin-signup.dto";
+import { AdminSignInDto } from "../dto/admin-signin.dto";
 import { Admin } from "../entity/admin.entity";
 import * as bcrypt from 'bcrypt';
 import { ConflictException, InternalServerErrorException } from "@nestjs/common";
 
 @EntityRepository(Admin)
 export class AdminRepository extends Repository<Admin> {
-    async adminUserRegistration(adminDto: AdminDto): Promise<{ message: string }> {
-        const { email, password, role } = adminDto;
-        console.log('adminDto repository: ', adminDto);
+    async adminUserRegistration(adminSignUpDto: AdminSignUpDto): Promise<{ message: string }> {
+        const { email, password, role } = adminSignUpDto;
+        console.log('adminSignUpDto repository: ', adminSignUpDto);
 
         const salt = await bcrypt.genSalt();
 
@@ -26,6 +27,20 @@ export class AdminRepository extends Repository<Admin> {
             } else {
                 throw new InternalServerErrorException();
             }
+        }
+    }
+
+    async validateAdminUser(adminSignInDto: AdminSignInDto): Promise<{ email: string, role: string }> {
+        const { email, password } = adminSignInDto;
+        const auth = await this.findOne({ email });
+        
+        if (auth && await auth.validatePassword(password, auth.encryptedPassword)) {
+            return {
+                email: auth.email,
+                role: auth.role
+            }
+        } else {
+            return null
         }
     }
 

@@ -14,23 +14,19 @@ export async function setupAdminPanel(app: INestApplication): Promise<void> {
 
     const adminBro = new AdminBro({
         rootPath: '/admin',  // Define path for the admin panel
+        loginPath: '/admin/login',
         resources: [
             UserResource,
             UserInfoResource,
             TodoResource,
             AdminResource
         ],
-        // locale: {
-        //     language: 'en',
-        //     translations: {
-        //         labels: {
-        //             UserResource: 'User Credential'
-        //         }
-        //     }
-        // },
+        branding: {
+            companyName: 'Todo App',
+            softwareBrothers: false
+        }
     });
 
     const router = AdminBroExpress.buildRouter(adminBro);
-    // const router = AdminBroExpress.b
     app.use(adminBro.options.rootPath, router);
 }

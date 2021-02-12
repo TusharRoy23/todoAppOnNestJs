@@ -1,6 +1,6 @@
 import { Body, Controller, Post, ValidationPipe } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { AdminDto } from "./dto/admin.dto";
+import { AdminSignUpDto } from "./dto/admin-signup.dto";
 import { AdminService } from "./service/admin.service";
 
 @ApiTags('Admin')
@@ -12,8 +12,8 @@ export class AdminController {
 
     @Post('/signup')
     adminUserRegistration(
-        @Body(ValidationPipe) adminDto: AdminDto
+        @Body(ValidationPipe) adminSignUpDto: AdminSignUpDto
     ): Promise<{ message: string }>  {
-        return this.adminService.adminUserRegistration(adminDto);
+        return this.adminService.adminUserRegistration(adminSignUpDto);
     }
 }

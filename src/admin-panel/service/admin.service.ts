@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { AdminDto } from "../dto/admin.dto";
+import { AdminSignInDto } from "../dto/admin-signin.dto";
+import { AdminSignUpDto } from "../dto/admin-signup.dto";
 import { AdminRepository } from "../repository/admin.repository";
 
 @Injectable()
@@ -10,7 +11,11 @@ export class AdminService {
         private adminRepository: AdminRepository
     ) {}
 
-    async adminUserRegistration(adminDto: AdminDto): Promise<{ message: string }> {
-        return this.adminRepository.adminUserRegistration(adminDto);
+    async adminUserRegistration(adminSignUpDto: AdminSignUpDto): Promise<{ message: string }> {
+        return this.adminRepository.adminUserRegistration(adminSignUpDto);
+    }
+
+    async adminUserLogin(adminSignInDto: AdminSignInDto): Promise<{ email: string, role: string }> {
+        return this.adminRepository.validateAdminUser(adminSignInDto);
     }
 }
