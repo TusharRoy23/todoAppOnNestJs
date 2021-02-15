@@ -1,3 +1,10 @@
 build:
   docker:
     web: Dockerfile
+run:
+  web: npm run start:dev
+release:
+  image: web
+  command:
+    - npm run typeorm:generate UpdatedInit
+    - npm run typeorm:run
