@@ -1,5 +1,5 @@
 # Image source
-FROM node:10-alpine
+FROM node:lts
 
 # Docker working directory
 WORKDIR /app
