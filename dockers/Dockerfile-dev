@@ -13,5 +13,8 @@ RUN npm install
 # Copy current directory to APP folder
 COPY . /app/
 
+# env declaration
+ENV NODE_ENV=development
+
 EXPOSE 3000
 CMD ["npm", "run", "start:dev"]
