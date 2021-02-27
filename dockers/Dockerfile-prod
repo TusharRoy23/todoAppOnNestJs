@@ -1,17 +1,13 @@
-# Image source
-FROM node:lts as prod
-
-# Docker working directory
+FROM node:lts AS prod
 WORKDIR /app
-
-# Copying file into APP directory of docker
-COPY ./package.json ./package-lock.json /app/
-
-# Then install the NPM module
+COPY ./package.json ./
 RUN npm install
+COPY . .
+RUN npm run build
 
-# Copy current directory to APP folder
-COPY . /app/
 
+FROM node:10
+WORKDIR /app
+COPY --from=prod /app ./
 EXPOSE 3000
 CMD ["npm", "run", "start:prod"]
