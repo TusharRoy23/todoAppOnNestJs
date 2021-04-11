@@ -4,7 +4,7 @@
 
 ## Description
 
-A simple TODO application under Docker environment.
+A simple TODO application using 2FA under Docker environment.
 * NestJS
 * TypeORM
 * PostgreSQL
@@ -12,6 +12,7 @@ A simple TODO application under Docker environment.
 * PGadmin4
 * JWT
 * Docker
+* Google Authenticator
 
 Go to [Medium](https://tushar-chy.medium.com/a-simple-todo-application-with-nestjs-typeorm-postgresql-swagger-pgadmin4-jwt-and-docker-caa2742a4295) to get the full tutorial.
 
