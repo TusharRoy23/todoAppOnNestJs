@@ -2,11 +2,14 @@ import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthController } from './auth.controller';
+import { AuthController } from './controller/auth.controller';
 import { UserRepository } from './repository/user.repository';
 import { AuthService } from './service/auth.service';
-import { JwtStrategy } from './jwt-strategy';
-import { JwtRefreshStrategy } from './jwt-refresh-strategy';
+import { JwtStrategy } from './strategy/jwt-strategy';
+import { JwtRefreshStrategy } from './strategy/jwt-refresh-strategy';
+import { TwoFactorAuthService } from './service/two-factor-auth.service';
+import { TwoFactorAuth } from './controller/two-factor-auth.controller';
+import { JwtTwoFaStrategy } from './strategy/jwt-2fa-strategy';
 
 // import * as config from 'config'
 
@@ -26,16 +29,19 @@ import { JwtRefreshStrategy } from './jwt-refresh-strategy';
         JwtModule.register({}),
         TypeOrmModule.forFeature([UserRepository])
     ],
-    controllers: [AuthController],
+    controllers: [AuthController, TwoFactorAuth],
     providers: [
         AuthService,
+        TwoFactorAuthService,
         JwtStrategy,
-        JwtRefreshStrategy
+        JwtRefreshStrategy,
+        JwtTwoFaStrategy
     ],
     exports: [
         JwtStrategy,
         JwtRefreshStrategy,
-        PassportModule
+        PassportModule,
+        JwtTwoFaStrategy
     ]
 })
 export class AuthModule {}

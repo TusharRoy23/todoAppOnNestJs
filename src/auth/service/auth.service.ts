@@ -24,17 +24,24 @@ export class AuthService {
         return this.userRepository.signUp(signupCredentialsDto)
     }
 
-    async signIn(signInCredentialsDto: SignInCredentialsDto): Promise<{ accessToken: string, refreshToken: string, user: JwtPayload }> {
-        const resp = await this.userRepository.validateUserPassword(signInCredentialsDto)
+    async signIn(signInCredentialsDto: SignInCredentialsDto): Promise<{ accessToken: string, refreshToken?: string, user?: JwtPayload }> {
+        const resp = await this.userRepository.validateUserPassword(signInCredentialsDto);
         
         if (!resp) {
-            throw new UnauthorizedException('Invalid credentials')
+            throw new UnauthorizedException('Invalid credentials');
         }
 
-        const accessToken = await this.getAccessToken(resp)
-        const refreshToken = await this.getRefreshToken(resp)
+        const accessToken = await this.getAccessToken(resp);
 
-        await this.updateRefreshTokenInUser(refreshToken, resp.username)
+        if (resp.isTwoFactorEnable) {
+            return {
+                accessToken
+            }
+        }
+
+        const refreshToken = await this.getRefreshToken(resp);
+
+        await this.updateRefreshTokenInUser(refreshToken, resp.username);
 
         return {
             accessToken,

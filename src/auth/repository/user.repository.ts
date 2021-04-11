@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import { ConflictException, InternalServerErrorException } from "@nestjs/common";
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 
 import { SignupCredentialsDto } from "../dto/signup-credentials.dto";
 import { SignInCredentialsDto } from "../dto/signin-credentials.dto";
@@ -42,6 +42,7 @@ export class UserRepository extends Repository<User> {
 
         if (auth && await auth.validatePassword(password, auth.password)) {
             return {
+                isTwoFactorEnable: auth.isTwoFactorEnable,
                 username: auth.username,
                 user_info: auth.user_info
             }
@@ -51,17 +52,14 @@ export class UserRepository extends Repository<User> {
     }
 
     async getUserInfoByUsername(username: string) {
-        // console.log('username: ', username)
         const auth = await this.findOne({ username })
-        // console.log('auth: ', auth)
+
         if (auth) {
             return auth
         } else {
             return null
         }
     }
-
-
 
     private async hashPassword(password: string, salt: string): Promise<string>{
         return bcrypt.hash(password, salt)

@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGua
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthenticationGuard } from "src/guards/jwt-authentication.guard";
+import { JwtTwoFactorGuard } from "src/guards/jwt-two-factor.guard";
 import { GetUser } from "../auth/decorator/get-user.decorator";
 import { User } from "../auth/entity/user.entity";
 import { TodoDto } from "./dto/todo.dto";
@@ -13,7 +14,8 @@ import { TodoService } from "./service/todo.service";
 @ApiBearerAuth()
 @Controller('todo')
 // @UseGuards(AuthGuard())
-@UseGuards(JwtAuthenticationGuard)
+// @UseGuards(JwtAuthenticationGuard)
+@UseGuards(JwtTwoFactorGuard)
 
 export class TodoController {
     constructor(

@@ -24,6 +24,12 @@ export class User extends BaseEntity {
     @Exclude()
     public hashedRefreshToken?: string
 
+    @Column({ nullable: true })
+    twoFactorAuthSecret?: string
+
+    @Column({ default: false })
+    public isTwoFactorEnable: boolean
+
     @OneToMany(type => Todo, todo => todo.user, { eager: true })
     todo: Todo[]
 

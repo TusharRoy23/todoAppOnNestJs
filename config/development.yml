@@ -7,3 +7,4 @@ db:
 jwt:
   secret: 'anyKey'
   refreshSecret: 'noKey'
+  twoFactorAppName: 'todo-app'

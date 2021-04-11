@@ -1,11 +1,10 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Strategy, ExtractJwt } from 'passport-jwt'
-import { User } from "./entity/user.entity";
-import { JwtPayload } from "./interface/jwt-payload.interface";
-import { UserRepository } from "./repository/user.repository";
-import { AuthService } from "./service/auth.service";
+import { Strategy, ExtractJwt } from 'passport-jwt';
+import { JwtPayload } from "../interface/jwt-payload.interface";
+import { UserRepository } from "../repository/user.repository";
+import { AuthService } from "../service/auth.service";
 
 import * as config from 'config'
 
@@ -25,12 +24,19 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh-
     }
 
     async validate(payload: JwtPayload) {
-        const { username } = payload
-        const user = await this.userRepository.findOne({ username })
+        const { username } = payload;
+        const user = await this.userRepository.findOne({ username });
 
         if (!user) {
-            throw new UnauthorizedException()
+            throw new UnauthorizedException();
         }
-        return user
+
+        if (!user.isTwoFactorEnable) {
+            return user;
+        }
+
+        if (payload.isTwoFaAuthenticated) {
+            return user;
+        }
     }
 }

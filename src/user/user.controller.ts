@@ -11,14 +11,13 @@ import { UserService } from "./service/user.service";
 import { diskStorage } from "multer";
 import { UserInfoDto } from "./dto/user-info.dto";
 import { JwtAuthenticationGuard } from "src/guards/jwt-authentication.guard";
+import { JwtTwoFactorGuard } from "src/guards/jwt-two-factor.guard";
 
-// < -- Swagger Implementation Start -- >
 @ApiTags('User')
 @ApiBearerAuth()
-// < -- Swagger Implementation End -- >
 @Controller('user')
-// @UseGuards(AuthGuard())
-@UseGuards(JwtAuthenticationGuard)
+// @UseGuards(JwtAuthenticationGuard)
+@UseGuards(JwtTwoFactorGuard)
 export class UserController {
     constructor(
         private userService: UserService
