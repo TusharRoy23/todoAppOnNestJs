@@ -1,8 +1,8 @@
 {
   "name": "todoAppOnNestJs",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Demo application",
+  "author": "Tushar Roy Chowdhury",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
