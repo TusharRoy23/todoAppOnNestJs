@@ -5,10 +5,12 @@ FROM node:lts
 WORKDIR /app
 
 # Copying file into APP directory of docker
-COPY ./package.json ./package-lock.json /app/
+COPY ./package.json /app/
 
 # Then install the NPM module
-RUN npm install
+RUN npm install --verbose
+
+RUN npm install --no-package-lock
 
 # Copy current directory to APP folder
 COPY . /app/
