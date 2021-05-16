@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://tushar-chy.medium.com/a-simple-todo-application-with-nestjs-typeorm-postgresql-swagger-pgadmin4-jwt-and-docker-caa2742a4295" target="_blank"> <img src="https://repository-images.githubusercontent.com/180571949/1816f680-a221-11ea-8ae0-8d90df8436bb" alt="Nest Logo" /></a>
+  <a href="https://tushar-chy.medium.com/elasticsearch-kibana-and-nestjs-dockerized-application-b81105062c2d" target="_blank"> <img src="https://res.cloudinary.com/ecredit/image/upload/v1548844004/implement-elasticsearch-using-nestjsArtboard_1_4x_xhmtho.png" alt="Nest Logo" /></a>
 </p>
 
 ## Description
@@ -12,8 +12,10 @@ A simple TODO application under Docker environment.
 * PGadmin4
 * JWT
 * Docker
+* Elasticsearch
+* Kibana
 
-Go to [Medium](https://tushar-chy.medium.com/a-simple-todo-application-with-nestjs-typeorm-postgresql-swagger-pgadmin4-jwt-and-docker-caa2742a4295) to get the full tutorial.
+Go to [Medium](https://tushar-chy.medium.com/elasticsearch-kibana-and-nestjs-dockerized-application-b81105062c2d) to get the full tutorial.
 
 # Running the app on docker
 ## Docker build & start
