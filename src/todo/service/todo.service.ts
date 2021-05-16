@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In } from "typeorm";
 import { User } from "../../auth/entity/user.entity";
 import { TodoDto } from "../dto/todo.dto";
 import { Todo } from "../entity/todo.entity";

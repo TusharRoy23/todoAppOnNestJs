@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
-// import { Client } from '@elastic/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '../auth/auth.module';
 import { TodoRepository } from './repository/todo.repository';
 import { TodoSearchService } from './service/todo-search.service';
 import { TodoService } from './service/todo.service';
