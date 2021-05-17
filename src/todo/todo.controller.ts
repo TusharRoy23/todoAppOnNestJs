@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthenticationGuard } from "src/guards/jwt-authentication.guard";
 import { GetUser } from "../auth/decorator/get-user.decorator";
@@ -12,7 +11,6 @@ import { TodoService } from "./service/todo.service";
 @ApiTags('Todo')
 @ApiBearerAuth()
 @Controller('todo')
-// @UseGuards(AuthGuard())
 @UseGuards(JwtAuthenticationGuard)
 
 export class TodoController {
@@ -22,9 +20,20 @@ export class TodoController {
 
     @Get()
     getAllTodo(
-        @GetUser() user: User
+        @GetUser() user: User,
     ): Promise<TodoPayload[]> {
-        return this.todoService.getAllTodo(user)
+        return this.todoService.getAllTodo(user);
+    }
+
+    @Get('/search-todo')
+    searchTodo(
+        @GetUser() user: User,
+        @Query('search') search: string
+    ) {
+        if (search) {
+            return this.todoService.searchForTodos(search, user);
+        }
+        return [];
     }
 
     @Post()

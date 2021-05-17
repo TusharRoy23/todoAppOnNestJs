@@ -5,6 +5,9 @@
 # postgres storage
 /pgadmin-data
 /pgdata
+/esData01
+/esdump
+/pgfile
 
 # migration folder
 ./src/migration/*.ts
