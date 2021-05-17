@@ -13,7 +13,7 @@ export class TodoSearchService {
     ) {}
 
     async indexTodo(todo: Todo, userEmail: string) {
-        return await this.elasticSearchService.index<TodoSearchResult, TodoSearchBody>({
+        return this.elasticSearchService.index<TodoSearchResult, TodoSearchBody>({
             index: this.index,
             body: {
                 id: todo.id,
@@ -33,7 +33,7 @@ export class TodoSearchService {
     }
 
     async search(text: string, email: string) {
-        return await this.elasticSearchService.search<TodoSearchResult>({
+        return this.elasticSearchService.search<TodoSearchResult>({
             index: this.index,
             body: {
                 query: {
@@ -104,7 +104,7 @@ export class TodoSearchService {
             return `${result} ctx._source['${key}']='${value}';`;
         }, '');
         
-        return await this.elasticSearchService.updateByQuery({
+        return this.elasticSearchService.updateByQuery({
             index: this.index,
             body: {
                 query: {
