@@ -36,6 +36,6 @@ export class UserService {
         if (userInfoDto.modified_photo) userInfo.modified_photo = userInfoDto.modified_photo
         
         await userInfo.save()
-        return userInfo
+        return {...userInfo, username: user.username};
     }
 }
