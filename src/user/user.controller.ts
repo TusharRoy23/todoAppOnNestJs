@@ -25,10 +25,13 @@ export class UserController {
     ) {}
 
     @Get()
-    getUserInfo(
+    async getUserInfo(
         @GetUser() user: User
     ): Promise<userInfoData> {
-        return this.userService.getUser(user)
+        const value = await this.userService.getUser(user);
+
+        
+        return {...value, username: user.username};
     }
 
     @Patch()

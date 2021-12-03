@@ -10,6 +10,9 @@ services:
     container_name: postgres-db
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+      - ./pgfile:/tmp
+    networks:
+      - elastic
   nestjs:
     build: 
       context: .
@@ -28,14 +31,20 @@ services:
       - JWT_ACCESS_TOKEN_SECRET=${JWT_ACCESS_TOKEN_SECRET}
       - JWT_REFRESH_TOKEN_SECRET=${JWT_REFRESH_TOKEN_SECRET}
       - JWT_REFRESH_TOKEN_EXPIRATION_TIME=${JWT_REFRESH_TOKEN_EXPIRATION_TIME}
+      - ELASTICSEARCH_NODE=${ELASTICSEARCH_NODE}
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
     ports: 
       - "3000:3000" # expose-to-the-world : only-in-the-docker
     container_name: nest-todo-app-be
     depends_on: 
       - db
+      - esOne
     volumes: 
       - .:/app
       - /app/node_modules
+    networks:
+      - elastic
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -50,6 +59,45 @@ services:
       - ./pgadmin-data:/var/lib/pgadmin
     depends_on: 
       - db
+    networks:
+      - elastic
+  esOne:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    container_name: esOne
+    environment:
+      - node.name=esOne
+      - cluster.name=es-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./esData01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+  kib01:
+    image: docker.elastic.co/kibana/kibana:7.12.0
+    container_name: kib01
+    ports: 
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELASTICSEARCH_NODE}
+    depends_on: 
+      - esOne
+    links: 
+      - esOne
+    networks:
+      - elastic
 volumes:
   pgdata:
   pgadmin-data:
+  pgfile:
+  esData01:
+networks: 
+  elastic:
