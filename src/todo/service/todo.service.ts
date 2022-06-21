@@ -15,13 +15,13 @@ export class TodoService {
         private todoSearchService: TodoSearchService
     ) {}
 
-    async getAllTodo(user: User): Promise<TodoPayload[]>{
+    async getAllTodo(user: Partial<User>): Promise<TodoPayload[]>{
         return this.todoRepository.getAllTodo(user)
     }
 
     async createTodo(
         todoDto: TodoDto,
-        user: User
+        user: Partial<User>
     ): Promise<TodoPayload> {
         const newTodo = await this.todoRepository.createTodo(todoDto, user);
         this.todoSearchService.indexTodo(newTodo, user.username);
@@ -30,7 +30,7 @@ export class TodoService {
 
     async getTodoById(
         id: number,
-        user: User
+        user: Partial<User>
     ): Promise<Todo> {
         const todo = await this.todoRepository.findOne({ where: { id, userId: user.id } })
 
@@ -40,28 +40,30 @@ export class TodoService {
         return todo
     }
 
-    async updateTodoById(id: number, todoDto: TodoDto, user: User): Promise<TodoPayload> {
+    async updateTodoById(id: number, todoDto: TodoDto, user: Partial<User>): Promise<TodoPayload> {
         const todo = await this.getTodoById(id, user);
-        todo.title = todoDto.title
-        todo.description = todoDto.description
-        todo.updatedDate = new Date();
+        try {
+            todo.title = todoDto.title
+            todo.description = todoDto.description
+            todo.updatedDate = new Date();
 
-        const updated = await todo.save();
-        if (updated) {
-            await this.todoSearchService.update(todo, user.username);
-            return {
-                id: todo.id,
-                title: todo.title,
-                description: todo.description,
-                createdDate: todo.createdDate,
-                updatedDate: todo.updatedDate
-            } 
+            const updated = await this.todoRepository.updateTodo(todo);
+            if (updated) {
+                await this.todoSearchService.update(todo, user.username);
+                return {
+                    id: todo.id,
+                    title: todo.title,
+                    description: todo.description,
+                    createdDate: todo.createdDate,
+                    updatedDate: todo.updatedDate
+                } 
+            }
+        } catch (error) {
+            throw new NotFoundException(todo.id);
         }
-        throw new NotFoundException(todo.id);
-        
     }
 
-    async deleteTodoById(id: number, user: User): Promise<{ message: string }> {
+    async deleteTodoById(id: number, user: Partial<User>): Promise<{ message: string }> {
         const todo = await this.todoRepository.delete({ id, userId: user.id })
 
         if (todo.affected === 0) {
@@ -71,7 +73,7 @@ export class TodoService {
         return { message: 'Deleted successfully !' }
     }
 
-    async searchForTodos(text: string, user: User) {
+    async searchForTodos(text: string, user: Partial<User>) {
         const results = await this.todoSearchService.search(text, user.username);
         if (results) {
             return results;

@@ -39,7 +39,7 @@ services:
     container_name: nest-todo-app-be
     depends_on: 
       - db
-      - esOne
+      # - esOne
     volumes: 
       - .:/app
       - /app/node_modules

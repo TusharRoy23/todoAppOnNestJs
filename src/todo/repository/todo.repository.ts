@@ -3,12 +3,13 @@ import { EntityRepository, Repository } from "typeorm";
 import { TodoDto } from "../dto/todo.dto";
 import { Todo } from "../entity/todo.entity";
 import { TodoPayload } from "../interface/todo-payload.interface";
+import { InternalServerErrorException } from "@nestjs/common";
 
 @EntityRepository(Todo)
 export class TodoRepository extends Repository<Todo> {
     async createTodo(
         todoDto: TodoDto,
-        user: User
+        user: Partial<User>
     ): Promise<Todo> {
         const { title, description } = todoDto
 
@@ -16,20 +17,34 @@ export class TodoRepository extends Repository<Todo> {
 
         todo.title = title
         todo.description = description
-        todo.user = user
+        todo.user = user as User;
 
-        await todo.save()
+        await this.save(todo)
+        console.log('todo: ', todo);
 
         delete todo.user
         return todo
     }
 
-    async getAllTodo(user: User): Promise<TodoPayload[]> {
-        const query = this.createQueryBuilder('todo')
+    async getAllTodo(user: Partial<User>): Promise<TodoPayload[]> {
+        const query = this.createQueryBuilder('todo');
 
-        query.where('todo.userId = :userId', { userId: user.id })
+        try {
+            query.where('todo.userId = :userId', { userId: user.id })
 
-        const todos = await query.getMany()
-        return todos
+            const todos = await query.getMany()
+            return todos
+        } catch (error) {
+            throw new InternalServerErrorException();
+            
+        }
+    }
+
+    async updateTodo(todo: Todo): Promise<Todo> {
+        try {
+            return await this.save(todo);
+        } catch (error) {
+            throw new InternalServerErrorException();
+        }
     }
 }

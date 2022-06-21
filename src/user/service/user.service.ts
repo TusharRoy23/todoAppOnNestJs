@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 import { User } from "../../auth/entity/user.entity";
 import { UserInfoDto } from "../dto/user-info.dto";
 import { UserInfo } from "../entity/user-info.entity";
@@ -9,14 +10,14 @@ import { UserInfoRepository } from "../repository/user-info.repository";
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(UserInfoRepository)
-        private userInfoRepository: UserInfoRepository
+        @InjectRepository(UserInfo) private userInfoRepository: Repository<UserInfo>
     ) {}
 
     async getUser(
-        user: User
+        user: Partial<User>
     ): Promise<UserInfo> {
-        const userInfo = await this.userInfoRepository.findOne({ where : { id: user.user_info.id } })
+        const userInfoId = user.user_info.id;
+        const userInfo = await this.userInfoRepository.findOne({ where : { id: userInfoId } })
 
         if (!userInfo) {
             throw new NotFoundException("User not found.");
@@ -25,7 +26,7 @@ export class UserService {
     }
 
     async updateUserProfile(
-        user: User,
+        user: Partial<User>,
         userInfoDto: UserInfoDto
     ): Promise<userInfoData> {
         const userInfo = await this.getUser(user)
@@ -35,7 +36,7 @@ export class UserService {
         if (userInfoDto.photo) userInfo.photo = userInfoDto.photo
         if (userInfoDto.modified_photo) userInfo.modified_photo = userInfoDto.modified_photo
         
-        await userInfo.save()
+        await this.userInfoRepository.save(userInfo);
         return {...userInfo, username: user.username};
     }
 }

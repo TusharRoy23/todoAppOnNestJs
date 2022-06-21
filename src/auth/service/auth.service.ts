@@ -8,9 +8,9 @@ import { JwtPayload } from "../interface/jwt-payload.interface";
 import { UserRepository } from "../repository/user.repository";
 import * as bcrypt from 'bcrypt'
 
-import * as config from 'config'
+// import * as config from 'config'
 
-const dbConfig = config.get('jwt')
+// const dbConfig = config.get('jwt')
 
 @Injectable()
 export class AuthService {
@@ -59,16 +59,16 @@ export class AuthService {
 
     async getAccessToken(payload: JwtPayload) {
         const accessToken = await this.jwtService.sign(payload, {
-            secret: process.env.JWT_ACCESS_TOKEN_SECRET || dbConfig.secret,
-            expiresIn: +process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME || dbConfig.expiresIn
+            secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+            expiresIn: +process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME
         })
         return accessToken
     }
 
     async getRefreshToken(payload: JwtPayload) {
         const refreshToken = await this.jwtService.sign(payload, {
-            secret: process.env.JWT_REFRESH_TOKEN_SECRET || dbConfig.refreshSecret,
-            expiresIn: +process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME || dbConfig.refreshExpiresIn
+            secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+            expiresIn: +process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME
         })
         return refreshToken
     }

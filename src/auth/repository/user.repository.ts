@@ -22,9 +22,11 @@ export class UserRepository extends Repository<User> {
         try {
             const userInfo = new UserInfo()
             await userInfo.save()
+            // await this.save(userInfo);
 
             user.user_info = userInfo
-            await user.save()
+            // await user.save()
+            await this.save(user);
 
             return { message: 'User successfully created !' }
         } catch (error) {
